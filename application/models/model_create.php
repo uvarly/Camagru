@@ -21,8 +21,16 @@ class Model_Create extends Model
         $tmp = explode('/', $ext);
         $ext = end($tmp);
 
-        $allowed_ext = array('jpeg', 'jpg', 'png', 'gif');
+        $allowed_ext = array('jpg', 'jpeg', 'png', 'gif');
         if (!in_array($ext, $allowed_ext))
             return false;
+    }
+
+    public function upload_file()
+    {
+        if (!isset($_FILES['Post-Image']))
+            return false;
+        
+        
     }
 }
