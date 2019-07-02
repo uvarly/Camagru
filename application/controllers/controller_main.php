@@ -55,4 +55,12 @@ class Controller_Main extends Controller
 		header('Content-Type: image/jpg');
 		echo $image;
 	}
+
+	/**
+	 * Подлежит удалению!
+	 */
+	public function action_import()
+	{
+		require_once 'config/content.php';
+	}
 }

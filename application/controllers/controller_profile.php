@@ -10,13 +10,19 @@ class Controller_Profile extends Controller
 
 	public function action_index()
 	{
+		if (!isset($_SESSION['Logged_user']))
+			header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
+		else
+			action_user($_SESSION['Logged_user']);
 		$data = $this->model->get_data();
 		$this->view->generate('profile_view.php', 'template_view.php', $data);
 	}
 
 	public function action_user($user)
 	{
-		if ($this->model->checkUser($user[0]) == true)
+		$login = $user[0];
+
+		if ($this->model->checkUser($login) == true)
 		{
 			$data = $this->model->get_data();
 			$this->view->generate('profile_view.php', 'template_view.php', $data);
@@ -29,14 +35,26 @@ class Controller_Profile extends Controller
 		}
 	}
 
-	public function action_profile_image($image_name)
+	public function action_get_profile_image($image_name)
 	{
-		$image = $this->model->get_profile_image($image_name[0]);
-		header('Content-type: image/jpeg');
-		echo $image;
+		// if (preg_match('/^[0-9]+$/gm', $image_name) == 1)
+		// {
+		// 	$kek = preg_match('/^[0-9]+$/gm', $image_name);
+		// 	var_dump($kek);
+		// 	$image_name = get_image_name($image_name);
+		// 	$image = $this->model->get_profile_image($image_name);
+		// 	header('Content-type: image/jpeg');
+		// 	echo $image;
+		// }
+		// else
+		// {
+			$image = $this->model->get_profile_image($image_name[0]);
+			header('Content-type: image/jpeg');
+			echo $image;
+		// }
 	}
 
-	public function action_post_image($image_name)
+	public function action_get_post_image($image_name)
 	{
 		$image = $this->model->get_post_image($image_name[0]);
 		header('Content-Type: image/jpg');

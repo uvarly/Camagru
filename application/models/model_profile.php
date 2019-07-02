@@ -16,21 +16,38 @@ class Model_Profile extends Model
         return $data;
     }
 
-    public function checkUser($user)
+    public function checkUser($login)
     {
         require 'config/database.php';
 
-        if (empty($user[0]))
+        if (empty($login))
             header('Location: http://' . $_SERVER['HTTP_HOST'] . '/profile');
+
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
-        $data = $pdo->exec('
-            SELECT `Login`
-            FROM `Users`
-            WHERE `Login` = ' . $user . '
-        ');
+
+        $sql = 'SELECT `Login` FROM `Users` WHERE `Login` = ?';
+        $sth = $pdo->prepare($sql);
+        $sth = $pdo->execute(array($login));
+
+        $data = $sth->fetchAll();
+
         if ($data)
             return (true);
         return (false);
+    }
+
+    public function get_image_name($id)
+    {
+        require 'config/database.php';
+
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+
+        $sql = 'SELECT `Image` FROM `Users` WHERE `User_ID` = ?';
+        $sth = $pdo->prepare($sql);
+        $sth = $pdo->execute(array($id));
+
+        $data = $sth->fetchAll();
+        return ($data);
     }
 
     public function get_profile_image($image_name)
