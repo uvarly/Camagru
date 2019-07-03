@@ -19,10 +19,6 @@ class Controller_Create extends Controller
 
     public function action_new_post()
     {
-        if (!$this->model->check_file())
-            header('Location: http://' . $_SERVER['HTTP_HOST'] . '/create');
-
-        if (!$this->model->upload_file())
-            header('Location: http://' . $_SERVER['HTTP_HOST'] . '/create');
+        $this->model->check_form();
     }
 }
