@@ -10,10 +10,9 @@ class Controller_Profile extends Controller
 
 	public function action_index()
 	{
-		if (!isset($_SESSION['Logged_user']))
+		if (!isset($_SESSION['Logged_user']) || empty($_SESSION['Logged_user']))
 			header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
-		else
-			action_user($_SESSION['Logged_user']);
+
 		$data = $this->model->get_data();
 		$this->view->generate('profile_view.php', 'template_view.php', $data);
 	}
@@ -22,16 +21,19 @@ class Controller_Profile extends Controller
 	{
 		$login = $user[0];
 
-		if ($this->model->checkUser($login) == true)
+		if (!isset($login) || empty($login))
+			header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
+
+		if ($this->model->check_user($login) == true)
 		{
-			$data = $this->model->get_data();
+			$data = $this->model->get_user_data($login);
 			$this->view->generate('profile_view.php', 'template_view.php', $data);
 		}
 		else
 		{
-			// header('HTTP/1.1 404 Not Found');
-        	// header('Status: 404 Not Found');
-        	// header('Location: http://' . $_SERVER['HTTP_HOST'] . '/404');
+			header('HTTP/1.1 404 Not Found');
+        	header('Status: 404 Not Found');
+        	header('Location: http://' . $_SERVER['HTTP_HOST'] . '/404');
 		}
 	}
 

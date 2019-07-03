@@ -2,6 +2,10 @@
 <header></header>
 <main>
     <?php
+    if (isset($_SESSION['Logged_user']) && !empty($_SESSION['Logged_user']))
+        echo <<<SIGNOUT
+            <a href='http://{$_SERVER['HTTP_HOST']}/main/sign_out'>Sign out</a>
+SIGNOUT;
     foreach ($data as $post)
     {
         echo <<<POST

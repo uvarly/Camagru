@@ -7,6 +7,7 @@ class Model_Main extends Model
         require 'config/database.php';
 
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+
         $data = $pdo->query('
             SELECT `Users`.`Login`, `Users`.`Image` AS `Profile_Image`, `Posts`.`Image` AS `Post_Image`, `Posts`.`Message`, `Posts`.`Creation_Date` 
             FROM `Posts` JOIN `Users`
@@ -20,8 +21,12 @@ class Model_Main extends Model
         require 'config/database.php';
 
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
-        $login = $pdo->query("SELECT `Login` FROM `Users` WHERE `Login` = '$param'");
 
+        $sql = 'SELECT `Login` FROM `Users` WHERE `Login` = ?';
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($param));
+
+        $login = $sth->fetchAll();
         return $login;
     }
 
@@ -30,8 +35,12 @@ class Model_Main extends Model
         require 'config/database.php';
 
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
-        $email = $pdo->exec("SELECT `Email` FROM `Users` WHERE `Email` = '$param'");
 
+        $sql = 'SELECT `Email` FROM `Users` WHERE `Email` = ?';
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($param));
+
+        $email = $sth->fetchAll();
         return $email;
     }
 
@@ -40,18 +49,26 @@ class Model_Main extends Model
 		require 'config/database.php';
 
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
-        $message = $pdo->exec("SELECT `Message` FROM `Posts` WHERE `Message` = '$param'");
 
+        $sql = 'SELECT `Message` FROM `Posts` WHERE `Message` = ?';
+        $sth = $pdo->prapare($sql);
+        $sth->execute(array($param));
+
+        $message = $sth->fetchAll();
         return $message;
 	}
 
 	public function get_datetime($param)
 	{
-		require 'config/database.php';
+        require 'config/database.php';
 
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
-        $datetime = $pdo->exec("SELECT `Creation_Date` FROM `Posts` WHERE `Creation_Date` = '$param'");
 
+        $sql = 'SELECT `Creation_Date` FROM `Posts` WHERE `Creation_Date` = ?';
+        $sth = $pdo->prapare($sql);
+        $sth->execute(array($param));
+
+        $datetime = $pdo->fetchAll();
         return $datetime;
     }
     

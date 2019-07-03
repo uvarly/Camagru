@@ -14,6 +14,12 @@ class Controller_Main extends Controller
 		$this->view->generate('main_view.php', 'template_view.php', $data);
 	}
 
+	public function action_sign_out()
+	{
+		session_destroy();
+		header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
+	}
+
 	public function action_get_login($param)
 	{
 		$login = $this->model->get_login($param[0]);

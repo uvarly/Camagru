@@ -2,9 +2,6 @@
 <header></header>
 <main>
     <?php
-        echo <<<PROFILE
-        <img src=http://192.168.99.100:8080/profile/get_profile_image/{$_SESSION['Logged_user']}.jpeg>
-PROFILE;
         foreach ($data as $post)
         {
             echo <<<POST

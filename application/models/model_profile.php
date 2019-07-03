@@ -7,31 +7,46 @@ class Model_Profile extends Model
         require 'config/database.php';
 
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
-        $data = $pdo->query('
-            SELECT `Users`.`Login`, `Users`.`Image` AS `Profile_Image`, `Posts`.`Image` AS `Post_Image`, `Posts`.`Message`, `Posts`.`Creation_Date` 
-            FROM `Posts` JOIN `Users`
-            WHERE `Posts`.`User_ID` = `Users`.`User_ID` AND `Users`.`User_ID` = \'' . $_SESSION['Logged_user'] . '\'
-        ');
 
+        $sql = 'SELECT `Users`.`Login`, `Users`.`Image` AS `Profile_Image`, `Posts`.`Image` AS `Post_Image`, `Posts`.`Message`, `Posts`.`Creation_Date`
+                FROM `Posts` JOIN `Users`
+                WHERE `Posts`.`User_ID` = `Users`.`User_ID` AND `Users`.`Login` = ?';
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($_SESSION['Logged_user']));
+
+        $data = $sth->fetchAll();
         return $data;
     }
 
-    public function checkUser($login)
+    public function get_user_data($user)
     {
         require 'config/database.php';
 
-        if (empty($login))
-            header('Location: http://' . $_SERVER['HTTP_HOST'] . '/profile');
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+
+        $sql = 'SELECT `Users`.`Login`, `Users`.`Image` AS `Profile_Image`, `Posts`.`Image` AS `Post_Image`, `Posts`.`Message`, `Posts`.`Creation_Date`
+                FROM `Posts` JOIN `Users`
+                WHERE `Posts`.`User_ID` = `Users`.`User_ID` AND `Users`.`Login` = ?';
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($user));
+
+        $data = $sth->fetchAll();
+        return $data;
+    }
+
+    public function check_user($login)
+    {
+        require 'config/database.php';
 
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
 
         $sql = 'SELECT `Login` FROM `Users` WHERE `Login` = ?';
         $sth = $pdo->prepare($sql);
-        $sth = $pdo->execute(array($login));
+        $sth->execute(array($login));
 
         $data = $sth->fetchAll();
 
-        if ($data)
+        if (!empty($data))
             return (true);
         return (false);
     }
