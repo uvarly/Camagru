@@ -10,7 +10,8 @@ class Controller_Main extends Controller
 
 	public function action_index()
 	{	
-		$data = $this->model->get_data();
+		$data['posts'] = $this->model->get_posts();
+		$data['comments'] = $this->model->get_comments();
 		$this->view->generate('main_view.php', 'template_view.php', $data);
 	}
 
@@ -18,34 +19,6 @@ class Controller_Main extends Controller
 	{
 		session_destroy();
 		header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
-	}
-
-	public function action_get_login($param)
-	{
-		$login = $this->model->get_login($param[0]);
-		header('Content-type: text/plain');
-		echo $login;
-	}
-
-	public function action_get_email($param)
-	{
-		$email = $this->model->get_email($param[0]);
-		header('Content-type: text/plain');
-		echo $email;
-	}
-
-	public function action_get_message($param)
-	{
-		$message = $this->model->get_message($param[0]);
-		header('Content-type: text/plain');
-		echo $message;
-	}
-
-	public function action_get_datetime($param)
-	{
-		$datetime = $this->model->get_datetime($param[0]);
-		header('Content-type: text/plain');
-		echo $datetime;
 	}
 
 	public function action_get_profile_image($param)

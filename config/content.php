@@ -26,4 +26,12 @@ try {
 } catch (Exception $exc) {
     die ("Exception caught: " . $exc->getMessage());
 }
+
+try {
+    $pdo->exec("INSERT INTO `Comments` (`User_ID`, `Post_ID`, `Message`)
+                VALUES ('3', '1', 'That hurts, ya know!')");
+} catch (Exception $exc) {
+    die ("Exception caught: " . $exc->getMessage());
+}
+
 ?>
