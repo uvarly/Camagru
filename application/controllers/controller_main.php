@@ -15,8 +15,10 @@ class Controller_Main extends Controller
 		$this->view->generate('main_view.php', 'template_view.php', $data);
 	}
 
-	public function action_sign_out()
+	public function action_signout()
 	{
+		session_start();
+		$_SESSION = array();
 		session_destroy();
 		header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
 	}

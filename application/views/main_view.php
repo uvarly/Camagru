@@ -2,12 +2,19 @@
 <header></header>
 <main>
     <?php
+    echo <<<LINKS
+    <a href='/main'>Main</a>
+    <a href='/profile'>Profile</a>
+    <a href='/create'>Create</a>
+    <a href='/signup'>Sign up</a>
+LINKS;
+    if (!isset($_SESSION['Logged_user']) && empty($_SESSION['Logged_user']))
+        echo "<a href=/signin>Sign in</a>";
+    else
+        echo "<a href=/main/signout>Sign out</a>";
+
     foreach ($data as $post)
         var_dump($post);
-    if (isset($_SESSION['Logged_user']) && !empty($_SESSION['Logged_user']))
-        echo <<< SIGNOUT
-            <a href='http://{$_SERVER['HTTP_HOST']}/main/sign_out'>Sign out</a>
-SIGNOUT;
     foreach ($data['posts'] as $post)
     {
         echo <<< POST
