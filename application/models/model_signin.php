@@ -28,7 +28,11 @@ class Model_Signin extends Model {
         foreach ($result as $match)
         {
             if ($login == $match['Login'] && $passw == $match['Password'])
+            {
+                $_SESSION['Logged_user'] = $login;
+                $_SESSION['Session_ID'] = hash('whirlpool', $login);
                 return 'success';
+            }
         }        
         return 'fail';
     }

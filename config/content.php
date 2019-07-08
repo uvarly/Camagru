@@ -34,6 +34,10 @@ try {
 try {
     $pdo->exec("INSERT INTO `Comments` (`User_ID`, `Post_ID`, `Message`)
                 VALUES ('3', '1', 'That hurts, ya know!')");
+    $pdo->exec("INSERT INTO `Comments` (`User_ID`, `Post_ID`, `Message`)
+                VALUES ('2', '2', 'Quit munching that stupid cherry, Kakyoin!!')");
+    $pdo->exec("INSERT INTO `Comments` (`User_ID`, `Post_ID`, `Message`)
+                VALUES ('1', '2', 'Who\'s Jiorno btw?')");
 } catch (Exception $exc) {
     die ("Exception caught: " . $exc->getMessage());
 }

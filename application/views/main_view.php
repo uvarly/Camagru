@@ -17,7 +17,7 @@ LINKS;
         var_dump($post);
     foreach ($data['posts'] as $post)
     {
-        echo <<< POST
+        echo <<<POST
             <article>
                 <section class="post-user">
                     <img src=http://192.168.99.100:8080/main/get_profile_image/{$post['Profile_Image']}><br />
@@ -36,13 +36,13 @@ POST;
         foreach ($data['comments'] as $comment)
         {
             if ($post['Post_ID'] == $comment['Post_ID'])
-                echo <<< COMMENT
+                echo <<<COMMENT
                 <p>{$comment['Login']}</p>
                 <p>{$comment['Message']}</p>
                 <p>{$comment['Creation_Date']}</p>
 COMMENT;
         }
-        echo <<< POST
+        echo <<<POST
                 </section>
             </article>
 POST;

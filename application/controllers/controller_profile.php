@@ -10,7 +10,7 @@ class Controller_Profile extends Controller
 
 	public function action_index()
 	{
-		if (!isset($_SESSION['Logged_user']) || empty($_SESSION['Logged_user']))
+		if (!isset($_SESSION['Logged_user']) || empty($_SESSION['Logged_user']) || $_SESSION['Session_ID'] != hash('whirlpool', $_SESSION['Logged_user']))
 			header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
 
 		$data = $this->model->get_data();

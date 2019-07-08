@@ -10,8 +10,7 @@ class Controller_Main extends Controller
 
 	public function action_index()
 	{	
-		$data['posts'] = $this->model->get_posts();
-		$data['comments'] = $this->model->get_comments();
+		$data= $this->model->get_data();
 		$this->view->generate('main_view.php', 'template_view.php', $data);
 	}
 
