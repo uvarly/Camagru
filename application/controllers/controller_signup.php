@@ -12,6 +12,7 @@ class Controller_Signup extends Controller {
 
     public function action_insert() {
         $result = $this->model->insert_user();
+
         switch ($result) {
             case 'success':
                 $this->view->generate('signup_view.php', 'template_view.php', 'success');
@@ -24,6 +25,9 @@ class Controller_Signup extends Controller {
                 break;
             case 'bad_email':
                 $this->view->generate('signup_view.php', 'template_view.php', 'bad_email');
+                break;
+            case 'bad_submit':
+                $this->view->generate('signup_view.php', 'template_view.php', 'bad_submit');
                 break;
             case 'user_exists':
                 $this->view->generate('signup_view.php', 'template_view.php', 'user_exists');

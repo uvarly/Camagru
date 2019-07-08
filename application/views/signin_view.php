@@ -20,12 +20,15 @@ LINKS;
             case 'bad_passw':
                 echo '<h1>BAD PASSWORD<h1>';
                 break;
+            case 'bad_submit':
+                echo '<h1>BAD SUBMIT<h1>';
+                break;
             default:
                 echo <<<FORM
                 <form action="/signin/authorize" method="POST">
                     <input type="text" placeholder="Login" name="login" required><br />
                     <input type="text" placeholder="Password" name="passw" required><br />
-                    <input type="submit" value="OK">
+                    <input type="submit" name="submit" value="OK">
                 </form>
 FORM;
                 break;

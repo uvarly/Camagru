@@ -7,25 +7,23 @@ class Model_Signup extends Model {
     public function insert_user() {
         require 'config/database.php';
 
-        if (!isset($_POST['login']) || empty($_POST['login'])) {
+        if (!isset($_POST['login']) || empty($_POST['login']))
             return 'bad_login';
-        }
 
-        if (!isset($_POST['passw']) || empty($_POST['passw'])) {
+        if (!isset($_POST['passw']) || empty($_POST['passw']))
             return 'bad_passw';
-        }
 
-        if (!isset($_POST['email']) || empty($_POST['email'])) {
+        if (!isset($_POST['email']) || empty($_POST['email']))
             return 'bad_email';
-        }
 
-        if (!$this->_check_login($_POST['login'])) {
+        if (!isset($_POST['submit']) || $_POST['submit'] != 'OK')
+            return 'bad_submit';
+
+        if (!$this->_check_login($_POST['login']))
             return 'user_exists';
-        }
 
-        if (!$this->_check_email($_POST['email'])) {
+        if (!$this->_check_email($_POST['email']))
             return 'email_exists';
-        }
 
         $login = $_POST['login'];
         $passw = hash('whirlpool', $_POST['passw']);

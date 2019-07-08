@@ -20,6 +20,9 @@ LINKS;
             case 'bad_email':
                 echo '<h1>BAD EMAIL<h1>';
                 break;
+            case 'bad_submit':
+                echo '<h1>BAD SUBMIT<h1>';
+                break;
             case 'user_exists':
                 echo '<h1>USER EXISTS<h1>';
                 break;

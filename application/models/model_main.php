@@ -37,6 +37,26 @@ class Model_Main extends Model
         return $data;
     }
 
+    public function add_comment($post_id, $user_id)
+    {
+        if (!isset($_POST['comment']) || empty($_POST['comment']))
+            return;
+        
+        if (!isset($_POST['submit']) || $_POST['submit'] != 'OK')
+            return;
+        
+        if (!$this->_check_post_id($post_id) || !$this->_check_user_id($user_id))
+            return;
+
+        require 'config/database.php';
+
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+        $sql = 'INSERT INTO `Comments` (`User_ID`, `Post_ID`, `Message`) VALUES (?, ?, ?)';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($user_id, $post_id, $_POST['comment']));
+    }
+
     public function get_profile_image($param)
     {
         require 'config/ftp.php';
@@ -51,5 +71,45 @@ class Model_Main extends Model
 
         $image = file_get_contents($FTP_CONN . 'user_images/' . $param);
         return $image;
+    }
+
+    private function _check_post_id($post_id)
+    {
+        require 'config/database.php';
+
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+        $sql = 'SELECT `Post_ID` FROM `Posts` WHERE `Post_ID` = ?';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($post_id));
+
+        $result = $sth->fetchAll();
+
+        foreach ($result as $match)
+        {
+            if ($post_id == $match['Post_ID'])
+                return true;
+        }
+        return false;
+    }
+
+    private function _check_user_id($user_id)
+    {
+        require 'config/database.php';
+
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+        $sql = 'SELECT `User_ID` FROM `Users` WHERE `User_ID` = ?';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($user_id));
+
+        $result = $sth->fetchAll();
+
+        foreach ($result as $match)
+        {
+            if ($user_id == $match['User_ID'])
+                return true;
+        }
+        return false;
     }
 }

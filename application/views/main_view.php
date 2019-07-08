@@ -42,7 +42,14 @@ POST;
                 <p>{$comment['Creation_Date']}</p>
 COMMENT;
         }
-        echo <<<POST
+        if (isset($_SESSION['Logged_user_ID']) && !empty($_SESSION['Logged_user_ID']))
+            echo <<<POST
+                </section>
+                <section class="post-add-comment">
+                    <form action=/main/comment/{$post['Post_ID']}/{$_SESSION['Logged_user_ID']} method=POST>
+                        <input type="text" placeholder="Your commentary" name="comment" required>
+                        <input type="submit" name="submit" value="OK">
+                    </form>
                 </section>
             </article>
 POST;

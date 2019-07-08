@@ -12,9 +12,11 @@ class Controller_Signin extends Controller {
 
     public function action_authorize() {
         $result = $this->model->signin_user();
+
         switch ($result) {
             case 'success':
                 $this->view->generate('signin_view.php', 'template_view.php', 'success');
+                header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
                 break;
             case 'fail':
                 $this->view->generate('signin_view.php', 'template_view.php', 'fail');
@@ -28,6 +30,9 @@ class Controller_Signin extends Controller {
                 break;
             case 'bad_passw':
                 $this->view->generate('signin_view.php', 'template_view.php', 'bad_passw');
+                break;
+            case 'bad_submit':
+                $this->view->generate('signin_view.php', 'template_view.php', 'bad_submit');
                 break;
         }
     }

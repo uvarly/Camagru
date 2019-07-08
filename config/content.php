@@ -37,7 +37,7 @@ try {
     $pdo->exec("INSERT INTO `Comments` (`User_ID`, `Post_ID`, `Message`)
                 VALUES ('2', '2', 'Quit munching that stupid cherry, Kakyoin!!')");
     $pdo->exec("INSERT INTO `Comments` (`User_ID`, `Post_ID`, `Message`)
-                VALUES ('1', '2', 'Who\'s Jiorno btw?')");
+                VALUES ('1', '2', 'Who\'s Giorno btw?')");
 } catch (Exception $exc) {
     die ("Exception caught: " . $exc->getMessage());
 }
