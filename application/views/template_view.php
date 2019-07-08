@@ -8,10 +8,10 @@
 <body>
     <?php
     echo <<<LINKS
-    <a href='http://{$_SERVER['HTTP_HOST']}/main'>Main</a>
-    <a href='http://{$_SERVER['HTTP_HOST']}/profile'>Profile</a>
-    <a href='http://{$_SERVER['HTTP_HOST']}/create'>Create</a>
-    <a href='http://{$_SERVER['HTTP_HOST']}/signup'>Sign up</a>
+    <a href='/main'>Main</a>
+    <a href='/profile'>Profile</a>
+    <a href='/create'>Create</a>
+    <a href='/signup'>Sign up</a>
 LINKS;
 //     if (!isset($_SESSION['Logged_user']))
 //         echo <<<NOAUTH

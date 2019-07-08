@@ -10,12 +10,16 @@ try {
 }
 
 try {
+    $dio = '\'' . hash('whirlpool', 'muda') . '\'';
+    $jotaro = '\'' . hash('whirlpool', 'ora') . '\'';
+    $kakyoin = '\'' . hash('whirlpool', 'rero') . '\'';
+
     $pdo->exec("INSERT INTO `Users` (`Login`, `Password`, `Email`, `Image`)
-                VALUES ('dio', 'muda', 'dio@mail.kek', 'dio.jpeg')");
+                VALUES ('dio', $dio, 'dio@mail.kek', 'dio.jpeg')");
     $pdo->exec("INSERT INTO `Users` (`Login`, `Password`, `Email`, `Image`)
-                VALUES ('jotaro', 'ora', 'jotaro@mail.kek', 'jotaro.jpeg')");
+                VALUES ('jotaro', $jotaro, 'jotaro@mail.kek', 'jotaro.jpeg')");
     $pdo->exec("INSERT INTO `Users` (`Login`, `Password`, `Email`, `Image`)
-                VALUES ('kakyoin', 'rerorero', 'kakyoin@mail.kek', 'kakyoin.jpeg')");
+                VALUES ('kakyoin', $kakyoin, 'kakyoin@mail.kek', 'kakyoin.jpeg')");
 } catch (Exception $exc) {
     die ("Exception caught: " . $exc->getMessage());
 }

@@ -25,6 +25,12 @@ class Controller_Signup extends Controller {
             case 'bad_email':
                 $this->view->generate('signup_view.php', 'template_view.php', 'bad_email');
                 break;
+            case 'user_exists':
+                $this->view->generate('signup_view.php', 'template_view.php', 'user_exists');
+                break;
+            case 'email_exists':
+                $this->view->generate('signup_view.php', 'template_view.php', 'email_exists');
+                break;
         }
     }
 }

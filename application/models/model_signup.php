@@ -19,19 +19,56 @@ class Model_Signup extends Model {
             return 'bad_email';
         }
 
-        $result = check_user()
+        if (!$this->_check_login($_POST['login'])) {
+            return 'user_exists';
+        }
+
+        if (!$this->_check_email($_POST['email'])) {
+            return 'email_exists';
+        }
+
+        $login = $_POST['login'];
+        $passw = hash('whirlpool', $_POST['passw']);
+        $email = $_POST['email'];
 
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
-        $sql = 'INSERT INTO `Users` (`Login`, `Password`, `Email`, `Image`) VALUES (?, ?, ?, ?)';
+        $sql = 'INSERT INTO `Users` (`Login`, `Password`, `Email`) VALUES (?, ?, ?)';
 
         $sth = $pdo->prepare($sql);
-        $sth->execute(array($login, $passw, $email, $image));
+        $sth->execute(array($login, $passw, $email));
 
-        return $sth;
+        return 'success';
     }
 
-    private function check_user($args)
-    {
+    private function _check_login($login) {
+        require 'config/database.php';
 
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+        $sql = 'SELECT `Login` FROM `Users` WHERE `Login` = ?';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($login));
+
+        $result = $sth->fetchAll();
+        foreach ($result as $match)
+            if ($login == $match['Login'])
+                return false;
+        return true;
+    }
+
+    private function _check_email($email) {
+        require 'config/database.php';
+
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+        $sql = 'SELECT `Email` FROM `Users` WHERE `Email` = ?';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($email));
+
+        $result = $sth->fetchAll();
+        foreach ($result as $match)
+            if ($email == $match['Email'])
+                return false;
+        return true;
     }
 }
