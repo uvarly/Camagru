@@ -98,16 +98,23 @@ class Model_Main extends Model
         require 'config/database.php';
 
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
-        $sql = 'SELECT `User_ID` FROM `Users` WHERE `User_ID` = ?';
+        $sql = 'SELECT `User_ID`, `Login` FROM `Users` WHERE `User_ID` = ?';
 
         $sth = $pdo->prepare($sql);
         $sth->execute(array($user_id));
 
         $result = $sth->fetchAll();
 
+        if (!isset($_SESSION['Logged_user']) || empty($_SESSION['Logged_user']) ||
+                !isset($_SESSION['Logged_user_ID']) || empty($_SESSION['Logged_user_ID']) ||
+                !isset($_SESSION['Session_ID']) || empty($_SESSION['Session_ID']))
+            return false;
+
         foreach ($result as $match)
         {
-            if ($user_id == $match['User_ID'])
+            if ($user_id == $match['User_ID'] &&
+                    $_SESSION['Logged_user'] == $match['Login'] &&
+                    $_SESSION['Session_ID'] == hash('whirlpool', $match['User_ID'] . $match['Login']))
                 return true;
         }
         return false;

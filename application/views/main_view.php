@@ -13,8 +13,12 @@ LINKS;
     else
         echo "<a href=/main/signout>Sign out</a>";
 
+    /** DUMPS */
+    var_dump($_SESSION);
     foreach ($data as $post)
         var_dump($post);
+    /** */
+
     foreach ($data['posts'] as $post)
     {
         echo <<<POST
