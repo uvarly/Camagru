@@ -55,6 +55,8 @@ class Model_Main extends Model
 
         $sth = $pdo->prepare($sql);
         $sth->execute(array($user_id, $post_id, $_POST['comment']));
+
+        $this->_send_mail($post_id, $user_id);
     }
 
     public function get_profile_image($param)
@@ -98,7 +100,7 @@ class Model_Main extends Model
         require 'config/database.php';
 
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
-        $sql = 'SELECT `User_ID`, `Login` FROM `Users` WHERE `User_ID` = ?';
+        $sql = 'SELECT `User_ID`, `Login`, `Email` FROM `Users` WHERE `User_ID` = ?';
 
         $sth = $pdo->prepare($sql);
         $sth->execute(array($user_id));
@@ -114,9 +116,23 @@ class Model_Main extends Model
         {
             if ($user_id == $match['User_ID'] &&
                     $_SESSION['Logged_user'] == $match['Login'] &&
-                    $_SESSION['Session_ID'] == hash('whirlpool', $match['User_ID'] . $match['Login']))
+                    $_SESSION['Session_ID'] == hash('whirlpool', $match['User_ID'] . $match['Login']))                
                 return true;
         }
         return false;
+    }
+
+    private function _send_mail($post_id, $user_id)
+    {
+        require 'config/database.php';
+
+        $to      = 'fil-stepanov@mail.ru';
+        $subject = 'the subject';
+        $message = 'Someone left the comment under your post. Check it out! Here\'s a link: ' . hash('whirlpool', 'kek');
+        $message = wordwrap($message, 70, "\r\n");
+        $headers =  "From: somerussianlad@gmail.com" . "\r\n" .
+                    "Reply-To: somerussianlad@gmail.com" . "\r\n" .
+                    "X-Mailer: PHP/" . phpversion();
+        mail($to, $subject, $message, $headers);
     }
 }
