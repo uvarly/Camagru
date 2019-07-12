@@ -26,7 +26,7 @@ SIGNOUT;
                 <section class="post-comments">
 POST;
         $comments = $data['comments'];
-        foreach ($data['comments'] as $comment)
+        foreach ($comments as $comment)
         {
             if ($post['Post_ID'] == $comment['Post_ID'])
                 echo <<< COMMENT
