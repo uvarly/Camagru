@@ -15,7 +15,7 @@ try {
     (
         `User_ID` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL,
         `Login` VARCHAR(32) NOT NULL,
-        `Password` VARCHAR(32) NOT NULL,
+        `Password` VARCHAR(256) NOT NULL,
         `Email` VARCHAR(32) NOT NULL,
         `Image` VARCHAR(32) DEFAULT "noimg" NOT NULL,
         `Confirmed` BOOLEAN DEFAULT 0 NOT NULL

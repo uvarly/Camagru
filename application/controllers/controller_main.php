@@ -10,14 +10,24 @@ class Controller_Main extends Controller
 
 	public function action_index()
 	{	
-		$data['posts'] = $this->model->get_posts();
-		$data['comments'] = $this->model->get_comments();
+		$data= $this->model->get_data();
 		$this->view->generate('main_view.php', 'template_view.php', $data);
 	}
 
-	public function action_sign_out()
+	public function action_signout()
 	{
+		session_start();
+		$_SESSION = array();
 		session_destroy();
+		header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
+	}
+
+	public function action_comment($params)
+	{
+		$post_id = $params[0];
+		$user_id = $params[1];
+
+		$this->model->add_comment($post_id, $user_id);
 		header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
 	}
 
