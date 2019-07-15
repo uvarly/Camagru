@@ -12,8 +12,8 @@ class Model_Create extends Model
     public function check_form()
     {
         if (isset($_POST['Message']) && !empty($_POST['Message']) &&
-            isset($_POST['Submit']) && $_POST['Submit'] == 'Submit' &&
-            $_FILES['Post_Image']['error'] != 4)
+                    isset($_POST['Submit']) && $_POST['Submit'] == 'Submit' &&
+                    $_FILES['Post_Image']['error'] != 4)
                 echo "RERORERORERORERO";
             var_dump($_POST);
             var_dump($_FILES);
