@@ -6,6 +6,7 @@ class Model_Signup extends Model {
     
     public function insert_user() {
         require 'config/database.php';
+        require 'config/ftp.php';
 
         if (!isset($_POST['login']) || empty($_POST['login']))
             return 'bad_login';
@@ -29,11 +30,39 @@ class Model_Signup extends Model {
         $passw = hash('whirlpool', $_POST['passw']);
         $email = $_POST['email'];
 
+        if (!empty($_FILES))
+        {
+            $image = $_FILES['image']['tmp_name'];
+            if (!$this->_check_image($image))
+                return 'malicious_file';
+            
+                $info = exif_imagetype($image);
+                $extension = image_type_to_extension($info);
+                $extension = strtolower($extension);
+
+                switch ($extension) {
+                    case '.gif':
+                        $image = imagecreatefromgif($_FILES['image']['tmp_name']);
+                        break;
+                    case '.jpeg':
+                        $image = imagecreatefromjpeg($_FILES['image']['tmp_name']);
+                        break;
+                    case '.png':
+                        $image = imagecreatefrompng($_FILES['image']['tmp_name']);
+                        break;
+                }
+
+                imagejpeg($image, $FTP_CONN . 'user_profile_images/' . hash('crc32', $login) . '.jpg');
+                $image = hash('crc32', $login) . '.jpg';
+        }
+        else
+            $image = null;
+
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
-        $sql = 'INSERT INTO `Users` (`Login`, `Password`, `Email`) VALUES (?, ?, ?)';
+        $sql = 'INSERT INTO `Users` (`Login`, `Password`, `Email`, `Image`) VALUES (?, ?, ?, ?)';
 
         $sth = $pdo->prepare($sql);
-        $sth->execute(array($login, $passw, $email));
+        $sth->execute(array($login, $passw, $email, $image));
 
         return 'success';
     }
@@ -68,5 +97,21 @@ class Model_Signup extends Model {
             if ($email == $match['Email'])
                 return false;
         return true;
+    }
+
+    private function _check_image($file) {
+
+        $image_type = exif_imagetype($file);
+
+        switch ($image_type) {
+            case IMAGETYPE_GIF:
+            case IMAGETYPE_JPEG:
+            case IMAGETYPE_PNG:
+                return true;
+                break;
+            default:
+                return false;
+                break;
+        }
     }
 }

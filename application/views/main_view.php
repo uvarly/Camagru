@@ -17,6 +17,7 @@ LINKS;
     var_dump($_SESSION);
     foreach ($data as $post)
         var_dump($post);
+    var_dump($_SERVER);
     /** */
 
     foreach ($data['posts'] as $post)

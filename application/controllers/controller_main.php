@@ -28,7 +28,7 @@ class Controller_Main extends Controller
 		$user_id = $params[1];
 
 		$this->model->add_comment($post_id, $user_id);
-		header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
+		// header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
 	}
 
 	public function action_get_profile_image($param)

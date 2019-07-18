@@ -126,13 +126,25 @@ class Model_Main extends Model
     {
         require 'config/database.php';
 
-        $to      = 'fil-stepanov@mail.ru';
-        $subject = 'the subject';
-        $message = 'Someone left the comment under your post. Check it out! Here\'s a link: ' . hash('whirlpool', 'kek');
-        $message = wordwrap($message, 70, "\r\n");
-        $headers =  "From: somerussianlad@gmail.com" . "\r\n" .
-                    "Reply-To: somerussianlad@gmail.com" . "\r\n" .
-                    "X-Mailer: PHP/" . phpversion();
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+        $sql = 'SELECT `Email` FROM `Users` WHERE `User_ID` = ?';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($user_id));
+
+        $result = $sth->fetchAll();
+
+        foreach ($result as $match)
+            $email = $match['Email'];
+
+        $to      = $email;
+        $subject = 'Camagru: New Comment';
+        $message = 'Someone left a comment under your post. Link: ' . $_SERVER['HTTP_HOST'] . '/';
+        $message = wordwrap($message, 70, '\r\n');
+        $headers =  'From: somerussianlad@gmail.com' . "\r\n" .
+                    'Reply-To: somerussianlad@gmail.com' . "\r\n" .
+                    'X-Mailer: PHP/' . phpversion();
+
         mail($to, $subject, $message, $headers);
     }
 }
