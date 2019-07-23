@@ -50,3 +50,13 @@ try {
 } catch (Exception $exc) {
     die ("Exception caught: " . $exc->getMessage());
 }
+
+try {
+    $pdo->exec('CREATE TABLE IF NOT EXISTS `Likes`
+    (
+        `User_ID` INT UNSIGNED NOT NULL,
+        `Post_ID` INT UNSIGNED NOT NULL
+    )');
+} catch (Exception $exc) {
+    die ("Exception caught: " . $exc->getMessage());
+}

@@ -14,10 +14,10 @@ LINKS;
         echo "<a href=/main/signout>Sign out</a>";
 
     /** DUMPS */
-    var_dump($_SESSION);
+    // var_dump($_SESSION);
     foreach ($data as $post)
         var_dump($post);
-    var_dump($_SERVER);
+    // var_dump($_SERVER);
     /** */
 
     foreach ($data['posts'] as $post)
@@ -25,18 +25,25 @@ LINKS;
         echo <<<POST
             <article>
                 <section class="post-user">
-                    <img src=http://192.168.99.100:8080/main/get_profile_image/{$post['Profile_Image']}><br />
+                    <img src=/main/get_profile_image/{$post['Profile_Image']}><br />
                     <p>{$post['Login']}</p>
                     <p>{$post['Creation_Date']}</p>
-                </section>
-                <section class="post-image">
-                    <img src=http://192.168.99.100:8080/main/get_post_image/{$post['Post_Image']}><br />
                 </section>
                 <section class="post-message">
                     <p>{$post['Message']}</p>
                 </section>
+                <section class="post-image">
+                    <img src=/main/get_post_image/{$post['Post_Image']}><br />
+                </section>
                 <section class="post-comments">
 POST;
+        if (isset($_SESSION['Logged_user_ID']) && !empty($_SESSION['Logged_user_ID']))
+            echo <<<LIKE
+                <form action=/main/like/{$post['Post_ID']}/{$_SESSION['Logged_user_ID']} method=POST>
+                    <input type="submit" class="post-like" name="like" value="like">
+                </form>
+                <p>{$data['likes'][$post['Post_ID'] - 1]['Likes']}</p>
+LIKE;
         $comments = $data['comments'];
         foreach ($comments as $comment)
         {

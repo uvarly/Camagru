@@ -14,13 +14,24 @@ class Model_Main extends Model
                         `Posts`.`Image` AS `Post_Image`,
                         `Posts`.`Message`,
                         `Posts`.`Creation_Date`
-                FROM `Posts` JOIN `Users`
-                WHERE `Posts`.`User_ID` = `Users`.`User_ID`
+                FROM `Posts`
+                    JOIN `Users`
+                        ON `Posts`.`User_ID` = `Users`.`User_ID`
                 ORDER BY `Posts`.`Creation_Date` DESC';
 
         $sth = $pdo->prepare($sql);
         $sth->execute();
         $data['posts'] = $sth->fetchAll();
+
+        $sql = 'SELECT COUNT(`Likes`.`Post_ID`) AS `Likes`
+                FROM `Posts` JOIN `Likes`
+                WHERE `Posts`.`Post_ID` = `Likes`.`Post_ID`
+                GROUP BY `Likes`.`Post_ID`
+                ORDER BY `Posts`.`Post_ID` ASC';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute();
+        $data['likes'] = $sth->fetchAll();
 
         $sql = 'SELECT  `Users`.`Login`,
                         `Posts`.`Post_ID`,
@@ -57,6 +68,27 @@ class Model_Main extends Model
         $sth->execute(array($user_id, $post_id, $_POST['comment']));
 
         $this->_send_mail($post_id, $user_id);
+    }
+
+    public function add_or_remove_like($post_id, $user_id)
+    {
+        if (!isset($_POST['like']) || $_POST['like'] != 'like')
+            return;
+
+        if (!$this->_check_post_id($post_id) || !$this->_check_user_id($user_id))
+            return;
+
+        require 'config/database.php';
+
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+
+        if ($this->_like_exists($post_id, $user_id))
+            $sql = 'DELETE FROM `Likes` WHERE `User_ID` = ? AND `Post_ID` = ?';
+        else
+            $sql = 'INSERT INTO `Likes` (`User_ID`, `Post_ID`) VALUES (?, ?)';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($user_id, $post_id));
     }
 
     public function get_profile_image($param)
@@ -117,6 +149,27 @@ class Model_Main extends Model
             if ($user_id == $match['User_ID'] &&
                     $_SESSION['Logged_user'] == $match['Login'] &&
                     $_SESSION['Session_ID'] == hash('whirlpool', $match['User_ID'] . $match['Login']))                
+                return true;
+        }
+        return false;
+    }
+
+    private function _like_exists($post_id, $user_id)
+    {
+        require 'config/database.php';
+
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+        $sql = 'SELECT `User_ID`, `Post_ID` FROM `Likes` WHERE `User_ID` = ? AND `Post_ID` = ?';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($user_id, $post_id));
+
+        $result = $sth->fetchAll();
+
+        foreach ($result as $match)
+        {
+            if ($user_id == $match['User_ID'] &&
+                    $post_id == $match['Post_ID'])
                 return true;
         }
         return false;

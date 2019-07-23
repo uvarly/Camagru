@@ -30,7 +30,7 @@ class Model_Signup extends Model {
         $passw = hash('whirlpool', $_POST['passw']);
         $email = $_POST['email'];
 
-        if (!empty($_FILES))
+        if ($_FILES['image']['error'] == 0)
         {
             $image = $_FILES['image']['tmp_name'];
             if (!$this->_check_image($image))
