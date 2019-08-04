@@ -56,13 +56,21 @@ class Model_Signup extends Model {
                 $image = hash('crc32', $login) . '.jpg';
         }
         else
-            $image = null;
+            $image = "noimg.jpeg";
+        
+        $this->_send_mail($login, $email);
 
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
         $sql = 'INSERT INTO `Users` (`Login`, `Password`, `Email`, `Image`) VALUES (?, ?, ?, ?)';
 
         $sth = $pdo->prepare($sql);
         $sth->execute(array($login, $passw, $email, $image));
+
+        $sql = 'INSERT INTO `Confirmation` (`ID`, `Login`) VALUES (?, ?)';
+        $id = hash('whirlpool', $login);
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($id, $login));
 
         return 'success';
     }
@@ -113,5 +121,17 @@ class Model_Signup extends Model {
                 return false;
                 break;
         }
+    }
+
+    private function _send_mail($login, $email) {
+        $to      = $email;
+        $subject = 'Camagru: Please confirm your account';
+        $message = 'Your newly created accound requires confirmation. Follow this link: http://' . $_SERVER['HTTP_HOST'] . '/signup/confirm/' . hash('whirlpool', $login);
+        $message = wordwrap($message, 70, "\r\n");
+        $headers =  'From: somerussianlad@gmail.com' . "\r\n" .
+                    'Reply-To: somerussianlad@gmail.com' . "\r\n" .
+                    'X-Mailer: PHP/' . phpversion();
+
+        mail($to, $subject, $message, $headers);
     }
 }

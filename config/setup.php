@@ -17,7 +17,7 @@ try {
         `Login` VARCHAR(32) NOT NULL,
         `Password` VARCHAR(256) NOT NULL,
         `Email` VARCHAR(32) NOT NULL,
-        `Image` VARCHAR(32) DEFAULT "noimg" NOT NULL,
+        `Image` VARCHAR(32),
         `Confirmed` BOOLEAN DEFAULT 0 NOT NULL
     )');
 } catch (Exception $exc) {
@@ -56,6 +56,16 @@ try {
     (
         `User_ID` INT UNSIGNED NOT NULL,
         `Post_ID` INT UNSIGNED NOT NULL
+    )');
+} catch (Exception $exc) {
+    die ("Exception caught: " . $exc->getMessage());
+}
+
+try {
+    $pdo->exec('CREATE TABLE IF NOT EXISTS `Confirmation`
+    (
+        `ID` VARCHAR(128) NOT NULL,
+        `Login` VARCHAR(32) NOT NULL
     )');
 } catch (Exception $exc) {
     die ("Exception caught: " . $exc->getMessage());
