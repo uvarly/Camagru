@@ -14,16 +14,15 @@ class Model_Main extends Model
                         `Posts`.`Image` AS `Post_Image`,
                         `Posts`.`Message`,
                         `Posts`.`Creation_Date`
-                FROM `Posts`
-                    JOIN `Users`
-                        ON `Posts`.`User_ID` = `Users`.`User_ID`
+                FROM    `Posts`
+                JOIN `Users` ON `Posts`.`User_ID` = `Users`.`User_ID`
                 ORDER BY `Posts`.`Creation_Date` DESC';
 
         $sth = $pdo->prepare($sql);
         $sth->execute();
         $data['posts'] = $sth->fetchAll();
 
-        $sql = 'SELECT COUNT(`Likes`.`Post_ID`) AS `Likes`
+        $sql = 'SELECT COUNT(`Likes`.`Post_ID`) AS `Likes`, `Likes`.`Post_ID`
                 FROM `Posts` JOIN `Likes`
                 WHERE `Posts`.`Post_ID` = `Likes`.`Post_ID`
                 GROUP BY `Likes`.`Post_ID`

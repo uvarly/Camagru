@@ -27,7 +27,7 @@ LINKS;
                 echo <<<FORM
                 <form action="/signin/authorize" method="POST">
                     <input type="text" placeholder="Login" name="login" required><br />
-                    <input type="text" placeholder="Password" name="passw" required><br />
+                    <input type="password" placeholder="Password" name="passw" required><br />
                     <input type="submit" name="submit" value="OK">
                 </form>
 FORM;

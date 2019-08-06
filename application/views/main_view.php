@@ -14,7 +14,7 @@ LINKS;
         echo "<a href=/main/signout>Sign out</a>";
 
     /** DUMPS */
-    // var_dump($_SESSION);
+    var_dump($_SESSION);
     foreach ($data as $post)
         var_dump($post);
     // var_dump($_SERVER);
@@ -42,8 +42,11 @@ POST;
                 <form action=/main/like/{$post['Post_ID']}/{$_SESSION['Logged_user_ID']} method=POST>
                     <input type="submit" class="post-like" name="like" value="like">
                 </form>
-                <p>{$data['likes'][$post['Post_ID'] - 1]['Likes']}</p>
 LIKE;
+        foreach ($data['likes'] as $likes)
+            if ($likes['Post_ID'] == $post['Post_ID'])
+                echo "<p>{$likes['Likes']} people liked this post</p>";
+
         $comments = $data['comments'];
         foreach ($comments as $comment)
         {

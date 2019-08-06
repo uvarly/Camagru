@@ -10,7 +10,7 @@ class Controller_Signup extends Controller {
         $this->view->generate('signup_view.php', 'template_view.php', null);
     }
 
-    public function action_insert() {
+    public function action_new_user() {
         $result = $this->model->insert_user();
 
         switch ($result) {
@@ -35,8 +35,18 @@ class Controller_Signup extends Controller {
             case 'email_exists':
                 $this->view->generate('signup_view.php', 'template_view.php', 'email_exists');
                 break;
-            case 'malicious_file':
-                $this->view->generate('signup_view.php', 'template_view.php', 'malicious_file');
+        }
+    }
+
+    public function action_confirm($param) {
+        $result = $this->model->confirm_account($param);
+
+        switch ($result) {
+            case 'success':
+                header('Location: /');
+                break;
+            case 'bad_link':
+                $this->view->generate('signup_view.php', 'template_view.php', 'confirm_bad_link');
                 break;
         }
     }

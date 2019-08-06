@@ -16,7 +16,7 @@ class Controller_Signin extends Controller {
         switch ($result) {
             case 'success':
                 $this->view->generate('signin_view.php', 'template_view.php', 'success');
-                header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
+                header('Location: /');
                 break;
             case 'fail':
                 $this->view->generate('signin_view.php', 'template_view.php', 'fail');

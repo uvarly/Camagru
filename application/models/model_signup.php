@@ -11,7 +11,8 @@ class Model_Signup extends Model {
         if (!isset($_POST['login']) || empty($_POST['login']))
             return 'bad_login';
 
-        if (!isset($_POST['passw']) || empty($_POST['passw']))
+        if (!isset($_POST['passw']) || empty($_POST['passw']) ||
+                $_POST['passw'] == strtolower($_POST['passw']) || strlen($_POST['passw']) <= 7)
             return 'bad_passw';
 
         if (!isset($_POST['email']) || empty($_POST['email']))
@@ -29,34 +30,7 @@ class Model_Signup extends Model {
         $login = $_POST['login'];
         $passw = hash('whirlpool', $_POST['passw']);
         $email = $_POST['email'];
-
-        if ($_FILES['image']['error'] == 0)
-        {
-            $image = $_FILES['image']['tmp_name'];
-            if (!$this->_check_image($image))
-                return 'malicious_file';
-            
-                $info = exif_imagetype($image);
-                $extension = image_type_to_extension($info);
-                $extension = strtolower($extension);
-
-                switch ($extension) {
-                    case '.gif':
-                        $image = imagecreatefromgif($_FILES['image']['tmp_name']);
-                        break;
-                    case '.jpeg':
-                        $image = imagecreatefromjpeg($_FILES['image']['tmp_name']);
-                        break;
-                    case '.png':
-                        $image = imagecreatefrompng($_FILES['image']['tmp_name']);
-                        break;
-                }
-
-                imagejpeg($image, $FTP_CONN . 'user_profile_images/' . hash('crc32', $login) . '.jpg');
-                $image = hash('crc32', $login) . '.jpg';
-        }
-        else
-            $image = "noimg.jpeg";
+        $image = "noimg.jpeg";
         
         $this->_send_mail($login, $email);
 
@@ -71,6 +45,34 @@ class Model_Signup extends Model {
 
         $sth = $pdo->prepare($sql);
         $sth->execute(array($id, $login));
+
+        return 'success';
+    }
+
+    public function confirm_account($param) {
+        require 'config/database.php';
+
+        if ($this->_check_link($param[0]) == false)
+            return 'bad_link';
+        
+        $link = $param[0];
+
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+
+        $sql = 'SELECT `Login` FROM `Confirmation` WHERE `ID` = ?';
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($link));
+
+        $result = $sth->fetch();
+        $login = $result['Login'];
+
+        $sql = 'UPDATE `Users` SET `Confirmed` = 1 WHERE `Login` = ?';
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($login));
+
+        $sql = 'DELETE FROM `Confirmation` WHERE `Login` = ?';
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($login));
 
         return 'success';
     }
@@ -107,20 +109,28 @@ class Model_Signup extends Model {
         return true;
     }
 
-    private function _check_image($file) {
+    private function _check_link($link)
+    {
+        require 'config/database.php';
 
-        $image_type = exif_imagetype($file);
+        if (!isset($link) || empty($link) || strlen($link) < 128)
+            return false;
 
-        switch ($image_type) {
-            case IMAGETYPE_GIF:
-            case IMAGETYPE_JPEG:
-            case IMAGETYPE_PNG:
-                return true;
-                break;
-            default:
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+
+        $sql = 'SELECT `ID`, `Login` FROM `Confirmation` WHERE `ID` = ?';
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($link));
+
+        $result = $sth->fetchAll();
+
+        foreach ($result as $match) {
+            $login = hash('whirlpool', $match['Login']);
+            if ($link != $login)
                 return false;
-                break;
         }
+
+        return true;
     }
 
     private function _send_mail($login, $email) {

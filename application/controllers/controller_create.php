@@ -11,7 +11,7 @@ class Controller_Create extends Controller
     public function action_index()
     {
         if (!$this->model->authenticate_user())
-            header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
+            header('Location: /');
 
         $data = $this->model->get_data();
         $this->view->generate('create_view.php', 'template_view.php', $data);

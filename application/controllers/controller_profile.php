@@ -11,7 +11,7 @@ class Controller_Profile extends Controller
 	public function action_index()
 	{
 		if (!isset($_SESSION['Logged_user']) || empty($_SESSION['Logged_user']) || $_SESSION['Session_ID'] != hash('whirlpool', $_SESSION['Logged_user']))
-			header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
+			header('Location: /');
 
 		$data = $this->model->get_data();
 		$this->view->generate('profile_view.php', 'template_view.php', $data);
@@ -22,7 +22,7 @@ class Controller_Profile extends Controller
 		$login = $user[0];
 
 		if (!isset($login) || empty($login))
-			header('Location: http://' . $_SERVER['HTTP_HOST'] . '/');
+			header('Location: /');
 
 		if ($this->model->check_user($login) == true)
 		{
@@ -33,7 +33,7 @@ class Controller_Profile extends Controller
 		{
 			header('HTTP/1.1 404 Not Found');
         	header('Status: 404 Not Found');
-        	header('Location: http://' . $_SERVER['HTTP_HOST'] . '/404');
+        	header('Location: /404');
 		}
 	}
 

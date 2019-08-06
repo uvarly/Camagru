@@ -14,12 +14,12 @@ try {
     $jotaro = '\'' . hash('whirlpool', 'ora') . '\'';
     $kakyoin = '\'' . hash('whirlpool', 'rero') . '\'';
 
-    $pdo->exec("INSERT INTO `Users` (`Login`, `Password`, `Email`, `Image`)
-                VALUES ('dio', $dio, 'dio@mail.kek', 'dio.jpeg')");
-    $pdo->exec("INSERT INTO `Users` (`Login`, `Password`, `Email`, `Image`)
-                VALUES ('jotaro', $jotaro, 'jotaro@mail.kek', 'jotaro.jpeg')");
-    $pdo->exec("INSERT INTO `Users` (`Login`, `Password`, `Email`, `Image`)
-                VALUES ('kakyoin', $kakyoin, 'kakyoin@mail.kek', 'kakyoin.jpeg')");
+    $pdo->exec("INSERT INTO `Users` (`Login`, `Password`, `Email`, `Image`, `Confirmed`)
+                VALUES ('dio', $dio, 'dio@mail.kek', 'dio.jpeg', '1')");
+    $pdo->exec("INSERT INTO `Users` (`Login`, `Password`, `Email`, `Image`, `Confirmed`)
+                VALUES ('jotaro', $jotaro, 'jotaro@mail.kek', 'jotaro.jpeg', '1')");
+    $pdo->exec("INSERT INTO `Users` (`Login`, `Password`, `Email`, `Image`, `Confirmed`)
+                VALUES ('kakyoin', $kakyoin, 'kakyoin@mail.kek', 'kakyoin.jpeg', '1')");
 } catch (Exception $exc) {
     die ("Exception caught: " . $exc->getMessage());
 }
