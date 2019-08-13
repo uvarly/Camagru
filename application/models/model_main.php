@@ -179,15 +179,17 @@ class Model_Main extends Model
         require 'config/database.php';
 
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
-        $sql = 'SELECT `Email` FROM `Users` WHERE `User_ID` = ?';
+        $sql = 'SELECT `Email`, `Send_Mail` FROM `Users` WHERE `User_ID` = ?';
 
         $sth = $pdo->prepare($sql);
         $sth->execute(array($user_id));
 
-        $result = $sth->fetchAll();
+        $result = $sth->fetch();
+        $email = $result['Email'];
+        $allowed = $result['Send_Mail'];
 
-        foreach ($result as $match)
-            $email = $match['Email'];
+        if ($allowed == 0)
+            return ;
 
         $to      = $email;
         $subject = 'Camagru: New Comment';

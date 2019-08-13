@@ -18,7 +18,8 @@ try {
         `Password` VARCHAR(256) NOT NULL,
         `Email` VARCHAR(32) NOT NULL,
         `Image` VARCHAR(32),
-        `Confirmed` BOOLEAN DEFAULT 0 NOT NULL
+        `Confirmed` BOOLEAN DEFAULT 0 NOT NULL,
+        `Send_Mail` BOOLEAN DEFAULT 1 NOT NULL
     )');
 } catch (Exception $exc) {
     die ("Exception caught: " . $exc->getMessage());

@@ -32,7 +32,7 @@ SUCCESS;
                 <form action="/signup/new_user" method="POST" enctype="multipart/form-data">
                     <input type="text" placeholder="Login" name="login"><br />
                     <input type="password" placeholder="Password" name="passw"><br />
-                    <input type="text" placeholder="Email" name="email"><br />
+                    <input type="email" placeholder="Email" name="email"><br />
                     <input type="submit" name="submit" value="OK">
                 </form>
 FORM;

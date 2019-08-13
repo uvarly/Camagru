@@ -6,6 +6,7 @@
     <a href='/main'>Main</a>
     <a href='/profile'>Profile</a>
     <a href='/create'>Create</a>
+    <a href='/settings'>Settings</a>
     <a href='/signup'>Sign up</a>
 LINKS;
     if (!isset($_SESSION['Logged_user']) && empty($_SESSION['Logged_user']))
