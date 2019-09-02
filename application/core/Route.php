@@ -44,6 +44,6 @@ class Route
     {
         header('HTTP/1.1 404 Not Found');
         header('Status: 404 Not Found');
-        header('Location: http://' . $_SERVER['HTTP_HOST'] . '/404');
+        header('Location: /404');
     }
 }

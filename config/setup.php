@@ -31,7 +31,7 @@ try {
         `Post_ID` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL,
         `User_ID` INT UNSIGNED NOT NULL,
         `Image` VARCHAR(32) NOT NULL,
-        `Message` VARCHAR(128) NOT NULL,
+        `Message` VARCHAR(128),
         `Likes` INT UNSIGNED DEFAULT 0 NOT NULL,
         `Creation_Date` DATETIME DEFAULT NOW() NOT NULL
     )');

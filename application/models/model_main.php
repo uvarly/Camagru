@@ -32,19 +32,85 @@ class Model_Main extends Model
         $sth->execute();
         $data['likes'] = $sth->fetchAll();
 
-        $sql = 'SELECT  `Users`.`Login`,
+        return $data;
+    }
+
+    public function get_data_post($post_id) {
+        require 'config/database.php';
+
+        if (!$this->_check_post_id($post_id))
+            return 'no_post';
+
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+        $sql = 'SELECT  `Users`.`User_ID`,
+                        `Users`.`Login`,
+                        `Users`.`Image` AS `Profile_Image`,
                         `Posts`.`Post_ID`,
+                        `Posts`.`Image` AS `Post_Image`,
+                        `Posts`.`Message`,
+                        `Posts`.`Creation_Date`
+                FROM    `Posts`
+                JOIN `Users` ON `Posts`.`User_ID` = `Users`.`User_ID` AND `Posts`.`Post_ID` = ?';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($post_id));
+
+        $data['post'] = $sth->fetch();
+
+        $sql = 'SELECT COUNT(`Likes`.`Post_ID`) AS `Likes`, `Likes`.`Post_ID`
+                FROM `Posts` JOIN `Likes`
+                WHERE `Posts`.`Post_ID` = `Likes`.`Post_ID` AND `Posts`.`Post_ID` = ?
+                GROUP BY `Likes`.`Post_ID`
+                ORDER BY `Posts`.`Post_ID` ASC';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($post_id));
+
+        $data['likes'] = $sth->fetch();
+
+        $sql = 'SELECT  `Users`.`Login`,
                         `Comments`.`Message`,
-                        `Comments`.`Creation_Date`
-                FROM `Users` JOIN `Posts` JOIN `Comments`
-                WHERE `Comments`.`Post_ID` = `Posts`.`Post_ID` AND `Comments`.`User_ID` = `Users`.`User_ID`
+                        `Comments`.`Creation_Date`,
+                        `Comments`.`User_ID`,
+                        `Comments`.`Comment_ID`
+                FROM `Users` JOIN `Comments`
+                WHERE `Comments`.`Post_ID` = ? AND `Comments`.`User_ID` = `Users`.`User_ID`
                 ORDER BY `Comments`.`Creation_Date` ASC';
 
         $sth = $pdo->prepare($sql);
-        $sth->execute();
+        $sth->execute(array($post_id));
+
         $data['comments'] = $sth->fetchAll();
 
         return $data;
+    }
+
+    public function delete_post($post_id, $user_id)
+    {
+        require 'config/database.php';
+
+        if (!$this->_check_post_id($post_id))
+            return ;
+
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+        $sql = 'SELECT `Post_ID`, `User_ID` FROM `Posts` WHERE `Post_ID` = ? AND `User_ID` = ?';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($post_id, $user_id));
+
+        $result = $sth->fetch();
+        if ($result == false)
+            return;
+
+        $sql = 'DELETE FROM `Posts` WHERE `Post_ID` = ?';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($post_id));
+
+        $sql = 'DELETE FROM `Comments` WHERE `Post_ID` = ?';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($post_id));
     }
 
     public function add_comment($post_id, $user_id)
@@ -54,7 +120,7 @@ class Model_Main extends Model
         
         if (!isset($_POST['submit']) || $_POST['submit'] != 'OK')
             return;
-        
+
         if (!$this->_check_post_id($post_id) || !$this->_check_user_id($user_id))
             return;
 
@@ -67,6 +133,29 @@ class Model_Main extends Model
         $sth->execute(array($user_id, $post_id, $_POST['comment']));
 
         $this->_send_mail($post_id, $user_id);
+    }
+
+    public function delete_comment($comment_id, $user_id)
+    {
+        require 'config/database.php';
+
+        if (!$this->_check_comment_id($comment_id))
+            return ;
+
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+        $sql = 'SELECT `Comment_ID`, `User_ID` FROM `Comments` WHERE `Comment_ID` = ? AND `User_ID` = ?';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($comment_id, $user_id));
+
+        $result = $sth->fetch();
+        if ($result == false)
+            return ;
+
+        $sql = 'DELETE FROM `Comments` WHERE `Comments`.`Comment_ID` = ?';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($comment_id));
     }
 
     public function add_or_remove_like($post_id, $user_id)
@@ -121,6 +210,26 @@ class Model_Main extends Model
         foreach ($result as $match)
         {
             if ($post_id == $match['Post_ID'])
+                return true;
+        }
+        return false;
+    }
+
+    private function _check_comment_id($comment_id)
+    {
+        require 'config/database.php';
+
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+        $sql = 'SELECT `Comment_ID` FROM `Comments` WHERE `Comment_ID` = ?';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute(array($comment_id));
+
+        $result = $sth->fetchAll();
+
+        foreach ($result as $match)
+        {
+            if ($comment_id == $match['Comment_ID'])
                 return true;
         }
         return false;

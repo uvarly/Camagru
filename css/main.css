@@ -1,0 +1,49 @@
+body {
+    font: 0.9em sans-serif;
+    background: rgb(240, 240, 240);
+    margin-bottom: 2em;
+}
+
+a {
+    text-decoration: none;
+}
+
+.navigation-buttons {
+    margin: 0.1em;
+    width: 4em;
+    height: 2em;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.post {
+    background: white;
+    border: 1px solid dimgrey;
+    display: block;
+    margin: 1em;
+    margin-left: 25vw;
+    margin-bottom: 1em;
+    padding: 5px;
+    width: 640px;
+    height: auto;
+}
+
+.post-user {
+    display: flex;
+}
+
+.post-username {
+}
+
+.post-user-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.post-image img {
+    width: 100%;
+    height: 100%;
+}

@@ -1,4 +1,6 @@
 <?php
-var_dump($_SERVER['REQUEST_URI']);
+echo <<<LINKS
+    <a href='/main'>Main</a>
+LINKS;
 ?>
 <h1>404</h1>

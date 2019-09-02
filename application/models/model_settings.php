@@ -114,12 +114,12 @@ class Model_Main extends Model {
         $ftp = ftp_connect($FTP_HOST);
         ftp_login($ftp, $FTP_USER, $FTP_PASS);
         
-        $image_list = ftp_nlist($ftp, "/user_profile_images/$filename.jpg");
+        $image_list = ftp_nlist($ftp, "/user_profile_images/$filename.jpeg");
 
-		if (in_array("/user_profile_images/$filename.jpg", $image_list))
-            ftp_delete($ftp, "/user_profile_images/$filename.jpg");
+		if (in_array("/user_profile_images/$filename.jpeg", $image_list))
+            ftp_delete($ftp, "/user_profile_images/$filename.jpeg");
             
-        imagejpeg($image, $FTP_CONN . "user_profile_images/$filename.jpg");
+        imagejpeg($image, $FTP_CONN . "user_profile_images/$filename.jpeg");
     }
 
     private function _update_user_table() {

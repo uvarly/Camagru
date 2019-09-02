@@ -1,0 +1,92 @@
+#create_post {
+    display: flex;
+    border: 1px solid gray;
+    border-radius: 1vmin;
+    margin: 2em;
+    width: 90%;
+    height: 80vh;
+    background: white;
+    min-width: 900px;
+    min-height: 670px;
+}
+
+#image_field {
+    padding: 1em;
+    margin: 1em;
+    display: inline-flex;
+    background: aqua;
+    width: 65%;
+    height: available;
+    min-width: 660px;
+    min-height: 500px;
+}
+
+#side_menu {
+    margin: 1em;
+    background: lightblue;
+    width: 35%;
+    height: available;
+}
+
+#sticker_bar {
+    display: block;
+    margin: 0.3em;
+    background: lightyellow;
+    width: available;
+    height: 75%;
+}
+
+#sticker_bar img {
+    display: none;
+    margin: 1em;
+}
+
+#description {
+    margin: 0.3em;
+    background: cornflowerblue;
+    width: available;
+    height: 10%;
+}
+
+#description input {
+    width: 80%;
+}
+
+#submit, #bsubmit, #biba, #del_stick{
+    margin: 1em 0.3em 0.3em 0.3em;
+    background: gray;
+    width: 98%;
+    height: 10%;
+}
+
+#file_up {
+    margin: 1em 0.3em 0.3em 0.3em;
+    background: gray;
+    width: 98%;
+    height: 30%;
+}
+
+canvas {
+    padding: 0;
+    /*margin: auto;*/
+    display: block;
+    position: relative;
+    margin-left: 0.5em;
+    top: -482px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+video {
+    padding: 0;
+    /*margin: auto;*/
+    display: block;
+    margin-left: 0.5em;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}

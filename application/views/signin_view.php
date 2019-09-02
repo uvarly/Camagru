@@ -4,8 +4,6 @@
     <?php
         echo <<<LINKS
         <a href='/main'>Main</a>
-        <a href='/profile'>Profile</a>
-        <a href='/create'>Create</a>
 LINKS;
         echo <<<FORM
             <form action="/signin/authorize" method="POST">

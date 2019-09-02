@@ -1,7 +1,10 @@
 <?php
-
+echo <<<LINKS
+    <a href='/main'>Main</a>
+    <a href='/profile'>Profile</a>
+    <a href='/camera'>Camera</a>
+LINKS;
 echo <<<SETTINGS
-    <link type="text/css" rel="stylesheet" href="/css/settings.css">
     <div class="settings">
         <h1>SETTINGS</h1>
         <hr>

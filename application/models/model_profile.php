@@ -8,13 +8,32 @@ class Model_Profile extends Model
 
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
 
-        $sql = 'SELECT `Users`.`Login`, `Users`.`Image` AS `Profile_Image`, `Posts`.`Image` AS `Post_Image`, `Posts`.`Message`, `Posts`.`Creation_Date`
-                FROM `Posts` JOIN `Users`
-                WHERE `Posts`.`User_ID` = `Users`.`User_ID` AND `Users`.`Login` = ?';
+        $sql = 'SELECT  `Users`.`User_ID`,
+                        `Users`.`Login`,
+                        `Users`.`Image` AS `Profile_Image`,
+                        `Posts`.`Post_ID`,
+                        `Posts`.`Image` AS `Post_Image`,
+                        `Posts`.`Message`,
+                        `Posts`.`Creation_Date`
+                FROM    `Posts`
+                JOIN `Users` ON `Posts`.`User_ID` = `Users`.`User_ID`
+                ORDER BY `Posts`.`Creation_Date` DESC';
+
         $sth = $pdo->prepare($sql);
         $sth->execute(array($_SESSION['Logged_user']));
 
-        $data = $sth->fetchAll();
+        $data['posts'] = $sth->fetchAll();
+
+        $sql = 'SELECT COUNT(`Likes`.`Post_ID`) AS `Likes`, `Likes`.`Post_ID`
+                FROM `Posts` JOIN `Likes`
+                WHERE `Posts`.`Post_ID` = `Likes`.`Post_ID`
+                GROUP BY `Likes`.`Post_ID`
+                ORDER BY `Posts`.`Post_ID` ASC';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute();
+        $data['likes'] = $sth->fetchAll();
+
         return $data;
     }
 
@@ -24,13 +43,32 @@ class Model_Profile extends Model
 
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASS);
 
-        $sql = 'SELECT `Users`.`Login`, `Users`.`Image` AS `Profile_Image`, `Posts`.`Image` AS `Post_Image`, `Posts`.`Message`, `Posts`.`Creation_Date`
-                FROM `Posts` JOIN `Users`
-                WHERE `Posts`.`User_ID` = `Users`.`User_ID` AND `Users`.`Login` = ?';
+        $sql = 'SELECT  `Users`.`User_ID`,
+                        `Users`.`Login`,
+                        `Users`.`Image` AS `Profile_Image`,
+                        `Posts`.`Post_ID`,
+                        `Posts`.`Image` AS `Post_Image`,
+                        `Posts`.`Message`,
+                        `Posts`.`Creation_Date`
+                FROM    `Posts`
+                JOIN `Users` ON `Posts`.`User_ID` = `Users`.`User_ID`
+                ORDER BY `Posts`.`Creation_Date` DESC';
+
         $sth = $pdo->prepare($sql);
         $sth->execute(array($user));
 
-        $data = $sth->fetchAll();
+        $data['posts'] = $sth->fetchAll();
+
+        $sql = 'SELECT COUNT(`Likes`.`Post_ID`) AS `Likes`, `Likes`.`Post_ID`
+                FROM `Posts` JOIN `Likes`
+                WHERE `Posts`.`Post_ID` = `Likes`.`Post_ID`
+                GROUP BY `Likes`.`Post_ID`
+                ORDER BY `Posts`.`Post_ID` ASC';
+
+        $sth = $pdo->prepare($sql);
+        $sth->execute();
+        $data['likes'] = $sth->fetchAll();
+
         return $data;
     }
 
